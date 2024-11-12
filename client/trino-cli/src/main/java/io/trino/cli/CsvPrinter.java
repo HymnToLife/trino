@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import static com.opencsv.ICSVWriter.NO_ESCAPE_CHARACTER;
 import static com.opencsv.ICSVWriter.NO_QUOTE_CHARACTER;
 import static io.trino.cli.FormatUtils.formatValue;
 import static java.util.Objects.requireNonNull;
@@ -31,7 +32,6 @@ public class CsvPrinter
 {
     private final List<String> fieldNames;
     private final ICSVWriter writer;
-
     private boolean needHeader;
 
     public enum CsvOutputFormat
@@ -66,7 +66,7 @@ public class CsvPrinter
         requireNonNull(fieldNames, "fieldNames is null");
         requireNonNull(writer, "writer is null");
         this.fieldNames = ImmutableList.copyOf(fieldNames);
-        this.writer = csvOutputFormat.isQuoted() ? new CSVWriter(writer) : new CSVWriterBuilder(writer).withQuoteChar(NO_QUOTE_CHARACTER).build();
+        this.writer = csvOutputFormat.isQuoted() ? new CSVWriter(writer) : new CSVWriterBuilder(writer).withQuoteChar(NO_QUOTE_CHARACTER).withEscapeChar(NO_ESCAPE_CHARACTER).build();
         this.needHeader = csvOutputFormat.showHeader();
     }
 
